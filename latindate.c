@@ -179,7 +179,7 @@ buildLatinDate (wchar_t * output, size_t size) {
                       romanCount);
   }
 
-  if (year < 1 || year > 3999) {
+  if (1 > year || 3999 < year) {
     (void)fprintf (stderr, "ERROR: Invalid year: must be >0 and <4000\n");
     exit(1);
   }
