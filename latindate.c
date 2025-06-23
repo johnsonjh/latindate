@@ -1,159 +1,165 @@
+#include <locale.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <wchar.h>
+
+#define MaxLatinLength    101
+#define MaxDayPartLength   17
+#define MaxRomanYearLength  9
+#define MaxRomanCountLength 3
 
 struct RomanMap {
   int val;
-  const char *sym;
+  const wchar_t * sym;
 };
 
-static const struct RomanMap romanMap[] ={
-  { 1000, "Ⅿ" }, { 900, "ⅭⅯ" }, { 500, "Ⅾ" }, { 400, "ⅭⅮ" },
-  {  100, "Ⅽ" }, {  90, "ⅩⅭ" }, {  50, "Ⅼ" }, {  40, "ⅩⅬ" },
-  {   10, "Ⅹ" }, {   9,  "Ⅸ" }, {   5, "Ⅴ" }, {   4,  "Ⅳ" },
-  {    1, "Ⅰ" }
+static const struct RomanMap romanMap [] = {
+  { 1000, L"Ⅿ" }, { 900, L"ⅭⅯ" }, { 500, L"Ⅾ" }, { 400, L"ⅭⅮ" },
+  {  100, L"Ⅽ" }, {  90, L"ⅩⅭ" }, {  50, L"Ⅼ" }, {  40, L"ⅩⅬ" },
+  {   10, L"Ⅹ" }, {   9, L"Ⅸ"  }, {   5, L"Ⅴ" }, {   4, L"Ⅳ"  },
+  {    1, L"Ⅰ" }
 };
 
 static void
-toRoman (int num, char *buf)
-{
-  int i = 0;
-
-  while (num > 0 && i < sizeof (romanMap) / sizeof (romanMap[0])) {
-    while (num >= romanMap[i].val) {
-      (void)strcat (buf, romanMap[i].sym);
-      num -= romanMap[i].val;
-    }
-    ++i;
+toRoman (int num, wchar_t * buf, size_t size) {
+  if (num < 13) {
+    static const wchar_t * directMap [13] = {
+      L"",
+      L"Ⅰ", L"Ⅱ", L"Ⅲ", L"Ⅳ", L"Ⅴ", L"Ⅵ",
+      L"Ⅶ", L"Ⅷ", L"Ⅸ", L"Ⅹ", L"Ⅺ", L"Ⅻ"
+    };
+    (void)wcsncpy (buf, directMap [num], size - 1);
+    buf [size - 1] = L'\0';
+    return;
   }
+
+  buf [0] = L'\0';
+
+  for (size_t i = 0; i < sizeof (romanMap) / sizeof (romanMap [0]); i++)
+    if (romanMap [i].val == 1) {
+      if (num < 4) {
+        static const wchar_t * onesMap [4] = { L"", L"Ⅰ", L"Ⅱ", L"Ⅲ" };
+        (void)wcscat (buf, onesMap [num]);
+        num = 0;
+      } else {
+        while (num >= 1 && wcslen (buf) + 1 < size) {
+          (void)wcscat (buf, L"Ⅰ");
+          num -= 1;
+        }
+      }
+    } else {
+      while (num >= romanMap [i].val &&
+             wcslen (buf) + wcslen (romanMap [i].sym) < size - 1) {
+        (void)wcscat (buf, romanMap [i].sym);
+        num -= romanMap [i].val;
+      }
+    }
 }
 
 static void
-buildLatinDate (char *output)
-{
-  const char *months[] = {
-    "ianuarias",  "februarias", "martias",   "aprilis",
-    "maias",      "iunias",     "iulias",    "augustas",
-    "septembres", "octobres",   "novembres", "decembres"
+buildLatinDate (wchar_t * output, size_t size) {
+  const wchar_t * months [] = {
+    L"ianuarias",  L"februarias", L"martias",   L"aprilis",
+    L"maias",      L"iunias",     L"iulias",    L"augustas",
+    L"septembres", L"octobres",   L"novembres", L"decembres"
   };
 
-  time_t t = time (NULL);
-  struct tm *now = localtime (&t);
+  time_t t        = time (NULL);
+  struct tm * now = localtime (&t);
 
-  int d = now->tm_mday;
-  int currentMonth = now->tm_mon;
-  int year = now->tm_year + 1900;
+  int d     = now->tm_mday;
+  int month = now->tm_mon;
+  int year  = now->tm_year + 1900;
 
   int daysInMonth;
 
-  switch (currentMonth)
-  {
-  case 0: case 2: case 4:
-  case 6: case 7: case 9:
-  case 11:
-    daysInMonth = 31;
-    break;
+  switch (month) {
+    case 1:
+      daysInMonth = (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0)) ? 29 : 28;
+      break;
 
-  case 3: case 5:
-  case 8: case 10:
-    daysInMonth = 30;
-    break;
+    case 0: case 2: case 4: case 6: case 7: case 9: case 11:
+      daysInMonth = 31;
+      break;
 
-  case 1:
-    if ((year % 4 == 0 && year % 100 != 0) || (year % 400 == 0))
-      daysInMonth = 29;
-    else
-      daysInMonth = 28;
-    break;
-
-  default:
-    daysInMonth = 30;
+    default:
+      daysInMonth = 30;
   }
 
-  int nones, ides;
+  int nones = (month == 2 || month == 4 || month == 6 || month == 9) ? 7 : 5;
+  int ides  = (month == 2 || month == 4 || month == 6 || month == 9) ? 15 : 13;
 
-  if (currentMonth == 2 || currentMonth == 4 ||
-      currentMonth == 6 || currentMonth == 9) {
-    nones = 7;
-    ides = 15;
-  } else {
-    nones = 5;
-    ides = 13;
-  }
+  wchar_t dayPart    [MaxDayPartLength]    = L"";
+  wchar_t romanCount [MaxRomanCountLength] = L"";
+  wchar_t romanYear  [MaxRomanYearLength]  = L"";
 
-  char dayPart[128] = "";
-  char romanCount[64] = "";
-
-  const char *marker = NULL;
-  const char *markerMonth = NULL;
+  const wchar_t * marker      = NULL;
+  const wchar_t * markerMonth = NULL;
 
   if (d == 1) {
-    (void)strcpy (dayPart, "kalendae");
-    markerMonth = months[currentMonth];
+    (void)wcscpy (dayPart, L"kalendae");
+    markerMonth = months [month];
   } else if (d < nones) {
     int count = nones - d + 1;
-    marker = "nonas";
-    markerMonth = months[currentMonth];
-    if (count == 2) {
-      (void)strcpy (dayPart, "pridie");
-    } else {
-      toRoman (count, romanCount);
-      (void)sprintf (dayPart, "ante·​diem·​%s", romanCount);
-    }
+    toRoman (count, romanCount, MaxRomanCountLength);
+    marker      = L"nonas";
+    markerMonth = months [month];
+    if (count == 2)
+      (void)wcscpy (dayPart, L"pridie");
+    else
+      (void)swprintf (dayPart, MaxDayPartLength, L"ante·​diem·​%ls", romanCount);
   } else if (d == nones) {
-    (void)strcpy (dayPart, "nonas");
-    markerMonth = months[currentMonth];
+    (void)wcscpy (dayPart, L"nonas");
+    markerMonth = months [month];
   } else if (d < ides) {
     int count = ides - d + 1;
-    marker = "idus";
-    markerMonth = months[currentMonth];
+    toRoman (count, romanCount, MaxRomanCountLength);
+    marker      = L"idus";
+    markerMonth = months [month];
     if (count == 2)
-      (void)strcpy (dayPart, "pridie");
-    else {
-      toRoman (count, romanCount);
-      (void)sprintf (dayPart, "ante·​diem·​%s", romanCount);
-    }
+      (void)wcscpy (dayPart, L"pridie");
+    else
+      (void)swprintf (dayPart, MaxDayPartLength, L"ante·​diem·​%ls", romanCount);
   } else if (d == ides) {
-    (void)strcpy (dayPart, "idus");
-    markerMonth = months[currentMonth];
+    (void)wcscpy (dayPart, L"idus");
+    markerMonth = months [month];
   } else {
     int count = daysInMonth - d + 2;
-    marker = "kalendas";
-    markerMonth = months[(currentMonth + 1) % 12];
+    toRoman (count, romanCount, MaxRomanCountLength);
+    marker      = L"kalendas";
+    markerMonth = months [(month + 1) % 12];
     if (count == 2)
-      (void)strcpy (dayPart, "pridie");
-    else {
-      toRoman (count, romanCount);
-      (void)sprintf (dayPart, "ante·​diem·​%s", romanCount);
-    }
+      (void)wcscpy (dayPart, L"pridie");
+    else
+      (void)swprintf (dayPart, MaxDayPartLength, L"ante·​diem·​%ls", romanCount);
   }
 
-  char romanYear[64] = "";
+  if (year < 1 || year > 3999) {
+    (void)fprintf (stderr, "Invalid year (must be >1 and <3999)\n");
+    exit(1);
+  }
 
-  if (year < 1)
-    year = 1;
-
-  if (year > 3999)
-    year = 3999;
-
-  toRoman (year, romanYear);
+  toRoman (year, romanYear, MaxRomanYearLength);
 
   if (marker == NULL)
-    (void)sprintf (output, "ultimum·​recognitum·​est·​%s·​"
-                           "%s·​anno·​domini·​%s\n",
-                   dayPart, markerMonth, romanYear);
+    (void)swprintf (output, size,
+                    L"ultimum·​recognitum·​est·​%ls"
+		    "·​%ls·​anno·​domini·​%ls\n",
+                    dayPart, markerMonth, romanYear);
   else
-    (void)sprintf (output, "ultimum·​recognitum·​est·​%s·​"
-                           "%s·​%s·​anno·​domini·​%s\n",
-                   dayPart, marker, markerMonth, romanYear);
+    (void)swprintf (output, size,
+                    L"ultimum·​recognitum·​est·​%ls·​%ls"
+		    "·​%ls·​anno·​domini·​%ls\n",
+                    dayPart, marker, markerMonth, romanYear);
 }
 
 int
 main (void)
 {
-  char inscription[512] = "";
-
-  buildLatinDate (inscription);
-
-  return fprintf (stdout, "%s", inscription);
+  (void)setlocale (LC_ALL, "");
+  wchar_t inscription [MaxLatinLength] = { 0 };
+  buildLatinDate (inscription, MaxLatinLength);
+  return wprintf (L"%ls", inscription);
 }
