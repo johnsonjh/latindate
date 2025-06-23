@@ -8,15 +8,21 @@
 #include <time.h>
 #include <wchar.h>
 
+/*****************************************************************************/
+
 #define MaxLatinLength    101
 #define MaxDayPartLength   17
 #define MaxRomanYearLength  9
 #define MaxRomanCountLength 3
 
+/*****************************************************************************/
+
 struct RomanMap {
   int val;
   const wchar_t * sym;
 };
+
+/*****************************************************************************/
 
 static const struct RomanMap romanMap [] = {
   { 1000, L"Ⅿ" }, { 900, L"ⅭⅯ" }, { 500, L"Ⅾ" }, { 400, L"ⅭⅮ" },
@@ -25,13 +31,19 @@ static const struct RomanMap romanMap [] = {
   {    1, L"Ⅰ" }
 };
 
+/*****************************************************************************/
+
 static bool
 match_utf8(const char *s) {
   if (!s)
     return false;
 
   size_t len = strlen(s);
-  for (size_t i = 0; i + 4 < len; ++i)
+
+  if (len < 5)
+    return false;
+
+  for (size_t i = 0; i <= len - 5; ++i)
     if ('u' == tolower(s [i]) &&
         't' == tolower(s [i + 1]) &&
         'f' == tolower(s [i + 2]) &&
@@ -40,6 +52,8 @@ match_utf8(const char *s) {
 
   return false;
 }
+
+/*****************************************************************************/
 
 static void
 toRoman (int num, wchar_t * buf, size_t size) {
@@ -77,6 +91,8 @@ toRoman (int num, wchar_t * buf, size_t size) {
       }
     }
 }
+
+/*****************************************************************************/
 
 static void
 buildLatinDate (wchar_t * output, size_t size) {
@@ -130,7 +146,8 @@ buildLatinDate (wchar_t * output, size_t size) {
     if (2 == count)
       (void)wcscpy (dayPart, L"pridie");
     else
-      (void)swprintf (dayPart, MaxDayPartLength, L"ante·​diem·​%ls",
+      (void)swprintf (dayPart, MaxDayPartLength,
+                      L"ante·​diem·​%ls",
                       romanCount);
   } else if (d == nones) {
     (void)wcscpy (dayPart, L"nonas");
@@ -143,7 +160,8 @@ buildLatinDate (wchar_t * output, size_t size) {
     if (2 == count)
       (void)wcscpy (dayPart, L"pridie");
     else
-      (void)swprintf (dayPart, MaxDayPartLength, L"ante·​diem·​%ls",
+      (void)swprintf (dayPart, MaxDayPartLength,
+                      L"ante·​diem·​%ls",
                       romanCount);
   } else if (d == ides) {
     (void)wcscpy (dayPart, L"idus");
@@ -156,7 +174,8 @@ buildLatinDate (wchar_t * output, size_t size) {
     if (2 == count)
       (void)wcscpy (dayPart, L"pridie");
     else
-      (void)swprintf (dayPart, MaxDayPartLength, L"ante·​diem·​%ls",
+      (void)swprintf (dayPart, MaxDayPartLength,
+                      L"ante·​diem·​%ls",
                       romanCount);
   }
 
@@ -179,6 +198,8 @@ buildLatinDate (wchar_t * output, size_t size) {
                     dayPart, marker, markerMonth, romanYear);
 }
 
+/*****************************************************************************/
+
 int
 main (void)
 {
@@ -200,3 +221,5 @@ main (void)
 
   return wprintf (L"%ls", inscription);
 }
+
+/*****************************************************************************/
