@@ -189,12 +189,12 @@ buildLatinDate (wchar_t * output, size_t size) {
   if (NULL == marker)
     (void)swprintf (output, size,
                     L"ultimum·​recognitum·​est·​%ls"
-                    "·​%ls·​anno·​domini·​%ls\n",
+                     "·​%ls·​anno·​domini·​%ls\n",
                     dayPart, markerMonth, romanYear);
   else
     (void)swprintf (output, size,
                     L"ultimum·​recognitum·​est·​%ls·​%ls"
-                    "·​%ls·​anno·​domini·​%ls\n",
+                     "·​%ls·​anno·​domini·​%ls\n",
                     dayPart, marker, markerMonth, romanYear);
 }
 
