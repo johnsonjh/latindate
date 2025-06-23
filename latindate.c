@@ -34,7 +34,7 @@ static const struct RomanMap romanMap [] = {
 /*****************************************************************************/
 
 static bool
-match_utf8(const char *s) {
+match_utf8(const char * s) {
   if (!s)
     return false;
 
@@ -204,7 +204,7 @@ int
 main (void)
 {
   if (0 != setlocale (LC_ALL, "")) {
-    char *codeset = nl_langinfo (CODESET);
+    char * codeset = nl_langinfo (CODESET);
     if (codeset) {
       if (!match_utf8 (codeset))
         (void)fprintf (stderr, "WARNING: Likely non-UTF-8 encoding: '%s'\n",
