@@ -2,6 +2,7 @@
  * latindate.c                           *
  * Copyright (c) 2025 Jeffrey H. Johnson *
  * SPDX-License-Identifier: MIT-0        *
+ * vim: set expandtab cc=80 :            *
  *****************************************/
 
 #include <ctype.h>
@@ -14,55 +15,71 @@
 #include <time.h>
 #include <wchar.h>
 
-/*****************************************************************************/
+/******************************************************************************/
 
-#define MaxLatinLength    101
+#define MaxLatinLength    110
 #define MaxDayPartLength   17
-#define MaxRomanYearLength  9
-#define MaxRomanCountLength 3
+#define MaxRomanYearLength 16
+#define MaxRomanCountLength 5
 
-/*****************************************************************************/
+/******************************************************************************/
 
-struct RomanMap {
+struct RomanMap
+{
   int val;
   const wchar_t * sym;
 };
 
-/*****************************************************************************/
+/******************************************************************************/
 
-static const struct RomanMap romanMap [] = {
+static const struct RomanMap romanMap [] =
+{
   { 1000, L"Ⅿ" }, { 900, L"ⅭⅯ" }, { 500, L"Ⅾ" }, { 400, L"ⅭⅮ" },
   {  100, L"Ⅽ" }, {  90, L"ⅩⅭ" }, {  50, L"Ⅼ" }, {  40, L"ⅩⅬ" },
   {   10, L"Ⅹ" }, {   9, L"Ⅸ"  }, {   5, L"Ⅴ" }, {   4, L"Ⅳ"  },
   {    1, L"Ⅰ" }
 };
 
-/*****************************************************************************/
+/******************************************************************************/
 
 static bool
-match_utf8(const char * s) {
+match_utf8 (const char *s)
+{
   if (!s)
     return false;
 
-  size_t len = strlen(s);
+  size_t len = strlen (s);
 
-  if (len < 5)
-    return false;
+  if (4 <= len) {
+    for (size_t i = 0; i <= len - 4; ++i) {
+      if ('u' == tolower (s [i])     &&
+          't' == tolower (s [i + 1]) &&
+          'f' == tolower (s [i + 2]) &&
+          '8' == s [i + 3]) {
+        return true;
+      }
+    }
+  }
 
-  for (size_t i = 0; i <= len - 5; ++i)
-    if ('u' == tolower(s [i]) &&
-        't' == tolower(s [i + 1]) &&
-        'f' == tolower(s [i + 2]) &&
-        '8' == tolower(s [i + 4]))
-      return true;
+  if (5 <= len) {
+    for (size_t i = 0; i <= len - 5; ++i) {
+      if ('u' == tolower (s [i])     &&
+          't' == tolower (s [i + 1]) &&
+          'f' == tolower (s [i + 2]) &&
+          '8' == s [i + 4]) {
+        return true;
+      }
+    }
+  }
 
   return false;
 }
 
-/*****************************************************************************/
+/******************************************************************************/
 
 static void
-toRoman (int num, wchar_t * buf, size_t size) {
+toRoman (int num, wchar_t * buf, size_t size)
+{
   if (num < 13) {
     static const wchar_t * directMap [13] = {
       L"",
@@ -98,17 +115,43 @@ toRoman (int num, wchar_t * buf, size_t size) {
     }
 }
 
-/*****************************************************************************/
+/******************************************************************************/
+
+static int
+isEaster (int day, int month, int year)
+{
+    int a = year % 19;
+    int b = year / 100;
+    int c = year % 100;
+    int d = b / 4;
+    int e = b % 4;
+    int f = (b + 8) / 25;
+    int g = (b - f + 1) / 3;
+    int h = (19 * a + b - d - g + 15) % 30;
+    int i = c / 4;
+    int k = c % 4;
+    int l = (32 + 2 * e + 2 * i - h - k) % 7;
+    int m = (a + 11 * h + 22 * l) / 451;
+
+    int easterMonth =   (h + l - 7 * m + 114) / 31;
+    int easterDay   = ( (h + l - 7 * m + 114) % 31 ) + 1;
+
+    return (day == easterDay && month + 1 == easterMonth);
+}
+
+/******************************************************************************/
 
 static void
-buildLatinDate (wchar_t * output, size_t size) {
+buildLatinDate (wchar_t * output, size_t size)
+{
+  wchar_t * easter = L"";
   const wchar_t * months [] = {
     L"ianuarias",  L"februarias", L"martias",   L"aprilis",
     L"maias",      L"iunias",     L"iulias",    L"augustas",
     L"septembres", L"octobres",   L"novembres", L"decembres"
   };
 
-  time_t t        = time (NULL);
+  time_t t = time (NULL);
   struct tm * now = localtime (&t);
 
   int d     = now->tm_mday;
@@ -116,6 +159,9 @@ buildLatinDate (wchar_t * output, size_t size) {
   int year  = now->tm_year + 1900;
 
   int daysInMonth;
+
+  if (1581 < year && isEaster (d, month, year))
+    easter = L"die·​Paschæ·​";
 
   switch (month) {
     case 1:
@@ -176,7 +222,7 @@ buildLatinDate (wchar_t * output, size_t size) {
     int count = daysInMonth - d + 2;
     toRoman (count, romanCount, MaxRomanCountLength);
     marker      = L"kalendas";
-    markerMonth = months [(month + 1) % 12];
+    markerMonth = months [ (month + 1) % 12];
     if (2 == count)
       (void)wcscpy (dayPart, L"pridie");
     else
@@ -187,39 +233,39 @@ buildLatinDate (wchar_t * output, size_t size) {
 
   if (1 > year || 3999 < year) {
     (void)fprintf (stderr, "ERROR: Invalid year: must be >0 and <4000\n");
-    exit(1);
+    exit (1);
   }
 
   toRoman (year, romanYear, MaxRomanYearLength);
 
   if (NULL == marker)
     (void)swprintf (output, size,
-                    L"ultimum·​recognitum·​est·​%ls"
+                    L"ultimum·​recognitum·​est·​%ls%ls"
                      "·​%ls·​anno·​domini·​%ls\n",
-                    dayPart, markerMonth, romanYear);
+                    easter, dayPart, markerMonth, romanYear);
   else
     (void)swprintf (output, size,
-                    L"ultimum·​recognitum·​est·​%ls·​%ls"
+                    L"ultimum·​recognitum·​est·​%ls%ls·​%ls"
                      "·​%ls·​anno·​domini·​%ls\n",
-                    dayPart, marker, markerMonth, romanYear);
+                    easter, dayPart, marker, markerMonth, romanYear);
 }
 
-/*****************************************************************************/
+/******************************************************************************/
 
 int
 main (void)
 {
   if (0 != setlocale (LC_ALL, "")) {
     char * codeset = nl_langinfo (CODESET);
-    if (codeset) {
-      if (!match_utf8 (codeset))
+    if (codeset)
+      if (!match_utf8 (codeset)) {
         (void)fprintf (stderr, "WARNING: Likely non-UTF-8 encoding: '%s'\n",
                        codeset);
-    } else
-      (void)fprintf (stderr, "WARNING: Failed to query encoding!\n");
+        (void)fflush (stdout);
+      }
   } else {
     (void)fprintf (stderr, "ERROR: Failed to setup locale!\n");
-    exit(1);
+    exit (1);
   }
 
   wchar_t inscription [MaxLatinLength] = { 0 };
@@ -228,4 +274,4 @@ main (void)
   return wprintf (L"%ls", inscription);
 }
 
-/*****************************************************************************/
+/******************************************************************************/
