@@ -1,9 +1,11 @@
 # Makefile
 # Copyright (c) 2025 Jeffrey H. Johnson
 # SPDX-License-Identifier: MIT-0
-# vim: set expandtab cc=80 :
+# vim: set noexpandtab cc=80 :
 
 ################################################################################
+
+SHELL:=/bin/sh
 
 RM?=rm -f
 
@@ -33,6 +35,6 @@ clean:
 
 .PHONY: lint
 lint: latindate.c
-	test -z "$(LINT)" && { exit 0; } || { env $(LINT) $<; };
+	test -z "$(LINT)" && { exit 0; } || { env $(LINT) -fd $<; };
 
 ################################################################################
