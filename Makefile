@@ -1,3 +1,7 @@
+# Makefile
+# Copyright (c) 2025 Jeffrey H. Johnson
+# SPDX-License-Identifier: MIT-0
+
 RM?=rm -f
 
 .PHONY: all

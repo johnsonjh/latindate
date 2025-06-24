@@ -1,3 +1,9 @@
+/*****************************************
+ * latindate.c                           *
+ * Copyright (c) 2025 Jeffrey H. Johnson *
+ * SPDX-License-Identifier: MIT-0        *
+ *****************************************/
+
 #include <ctype.h>
 #include <langinfo.h>
 #include <locale.h>
