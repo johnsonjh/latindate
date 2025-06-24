@@ -161,7 +161,7 @@ buildLatinDate (wchar_t * output, size_t size)
   int daysInMonth;
 
   if (1581 < year && isEaster (d, month, year))
-    easter = L"die·​Paschæ·​";
+    easter = L"die·​paschæ·​";
 
   switch (month) {
     case 1:
