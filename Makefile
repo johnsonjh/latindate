@@ -9,7 +9,7 @@ SHELL:=/bin/sh
 
 RM?=rm -f
 
-# lint target requires GNU make
+# LINT autodetection requires GNU make
 LINT:=$(shell { test -x /opt/oracle/developerstudio12.6/bin/lint && \
                 printf '%s\n' "/opt/oracle/developerstudio12.6/bin/lint"; } || \
               { test -x /opt/developerstudio12.6/bin/lint && \
@@ -35,6 +35,8 @@ clean:
 
 .PHONY: lint
 lint: latindate.c
-	test -z "$(LINT)" && { exit 0; } || { env $(LINT) -fd $<; };
+	@test -z "$(LINT)" && \
+	{ printf '%s\n' "LINT unset; skipping lint..."; exit 0; } || \
+	{ set -x; env $(LINT) -fd $<; };
 
 ################################################################################
