@@ -271,7 +271,7 @@ main (void)
   wchar_t inscription [MaxLatinLength] = { 0 };
   buildLatinDate (inscription, MaxLatinLength);
 
-  return wprintf (L"%ls", inscription);
+  return !wprintf (L"%ls", inscription);
 }
 
 /******************************************************************************/
