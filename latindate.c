@@ -21,10 +21,10 @@
 
 /******************************************************************************/
 
-#define MaxLatinLength    110
-#define MaxDayPartLength   17
+#define MaxLatinLength    128
+#define MaxDayPartLength   18
 #define MaxRomanYearLength 16
-#define MaxRomanCountLength 5
+#define MaxRomanCountLength 6
 
 /******************************************************************************/
 
@@ -148,7 +148,7 @@ isEaster (int day, int month, int year)
 static void
 buildLatinDate (wchar_t * output, size_t size)
 {
-  wchar_t * easter = L"";
+  wchar_t * holiday = L"";
   const wchar_t * months [] = {
     L"ianuarias",  L"februarias", L"martias",   L"aprilis",
     L"maias",      L"iunias",     L"iulias",    L"augustas",
@@ -165,7 +165,9 @@ buildLatinDate (wchar_t * output, size_t size)
   int daysInMonth;
 
   if (1581 < year && isEaster (d, month, year))
-    easter = L"die·​paschæ·​";
+    holiday = L"die·​paschæ·​";
+  else if (25 == d && 11 == month)
+    holiday = L"die·​nativitatis·​domini·​";
 
   switch (month) {
     case 1:
@@ -246,12 +248,12 @@ buildLatinDate (wchar_t * output, size_t size)
     (void)swprintf (output, size,
                     L"ultimum·​recognitum·​est·​%ls%ls"
                      "·​%ls·​anno·​domini·​%ls\n",
-                    easter, dayPart, markerMonth, romanYear);
+                    holiday, dayPart, markerMonth, romanYear);
   else
     (void)swprintf (output, size,
                     L"ultimum·​recognitum·​est·​%ls%ls·​%ls"
                      "·​%ls·​anno·​domini·​%ls\n",
-                    easter, dayPart, marker, markerMonth, romanYear);
+                    holiday, dayPart, marker, markerMonth, romanYear);
 }
 
 /******************************************************************************/
