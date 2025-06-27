@@ -21,10 +21,10 @@
 
 /******************************************************************************/
 
-#define MaxLatinLength    121
-#define MaxDayPartLength   17
-#define MaxRomanYearLength 14
-#define MaxRomanCountLength 5
+#define MaxLatinLength    128
+#define MaxDayPartLength   32
+#define MaxRomanYearLength 16
+#define MaxRomanCountLength 8
 
 /******************************************************************************/
 
@@ -247,12 +247,12 @@ buildLatinDate (wchar_t * output, size_t size)
   if (NULL == marker)
     (void)swprintf (output, size,
                     L"ultimum·​recognitum·​est·​%ls%ls"
-                     "·​%ls·​anno·​domini·​%ls\n",
+                    L"·​%ls·​anno·​domini·​%ls\n",
                     holiday, dayPart, markerMonth, romanYear);
   else
     (void)swprintf (output, size,
                     L"ultimum·​recognitum·​est·​%ls%ls·​%ls"
-                     "·​%ls·​anno·​domini·​%ls\n",
+                    L"·​%ls·​anno·​domini·​%ls\n",
                     holiday, dayPart, marker, markerMonth, romanYear);
 }
 
