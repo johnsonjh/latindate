@@ -24,7 +24,12 @@ LINT:=$(shell { test -x /opt/oracle/developerstudio12.6/bin/lint && \
 
 CPPCHECK:=$(shell command -v cppcheck > /dev/null 2>&1 && \
                   { printf '%s\n' \
-	            "cppcheck --force --check-level=exhaustive *.[ch]"; } || \
+                    "cppcheck --force --check-level=exhaustive *.[ch]"; } || \
+                  { printf '%s\n' "true"; })
+
+SCANBUILD:=$(shell command -v scan-build > /dev/null 2>&1 && \
+                  { printf '%s\n' \
+                    "$(MAKE) clean && scan-build $(MAKE)"; } || \
                   { printf '%s\n' "true"; })
 
 ################################################################################
@@ -50,14 +55,24 @@ clean:
 
 .PHONY: lint
 lint: latindate.c
+	$(MAKE) clean
+	@printf '%s\n' ""
 	@test -z "$(REUSE)" && \
 	 { printf '%s\n' "REUSE unset; skipping reuse..."; exit 0; } || \
 	 { set -x; env $(REUSE); };
+	@printf '%s\n' ""
 	@test -z "$(CPPCHECK)" && \
 	 { printf '%s\n' "CPPCHECK unset; skipping cppcheck..."; exit 0; } || \
 	 { set -x; env $(CPPCHECK); };
+	@printf '%s\n' ""
+	@test -z "$(SCANBUILD)" && \
+	 { printf '%s\n' "SCANBUILD unset; skipping analyzer ..."; exit 0; } || \
+	 { set -x; env $(SCANBUILD); };
+	@printf '%s\n' ""
 	@test -z "$(LINT)" && \
 	 { printf '%s\n' "LINT unset; skipping lint..."; exit 0; } || \
 	 { set -x; env $(LINT) -fd $<; };
+	@printf '%s\n' ""
+	$(MAKE) clean
 
 ################################################################################
