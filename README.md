@@ -23,13 +23,13 @@ ultimum·​recognitum·​est·​ante·​diem·​Ⅵ·​kalendas·​iulias
 
 The text translated to English reads:
 
-> "Last revised on the sixth day before the
+> Last revised on the sixth day before the
 > [kalends](https://en.wikipedia.org/wiki/Calends)
-> of July, in the year of our Lord 2025"
+> of July, in the year of our Lord 2025
 
 or, more succinctly:
 
-> "Last revised June 26 2025".
+> Last revised June 26 2025
 
 The Latin text is output in lower case, with words delimited by interpunct
 (`·`) characters, followed by Unicode zero-width space characters, for easier
