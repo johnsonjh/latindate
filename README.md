@@ -38,7 +38,7 @@ The Latin text is output in lower case, with words delimited by interpunct
 post-processing.  Ligatures are used where appropriate.  Easter and Christmas
 have specific handling.
 
-If you want to see generate the Latin text for *arbitrary* dates,
+If you want to generate the Latin text for *arbitrary* dates,
 [`libfaketime`](https://github.com/wolfcw/libfaketime) comes in handy:
 
 ```
