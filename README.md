@@ -51,8 +51,8 @@ The output itself is intended to be rendered using small capital glyphs.
 If you want regular capitals, you can leverage `tr` for the conversion:
 
 ```
-$ faketime -m 1909-01-06 ./latindate | tr '[:lower:]' '[:upper:]'
-ULTIMUM·​RECOGNITUM·​EST·​ANTE·​DIEM·​Ⅷ·​IDUS·​IANUARIAS·​ANNO·​DOMINI·​ⅯⅭⅯⅨ
+faketime -m 2032-03-28 ./latindate | tr '[:lower:]' '[:upper:]' | tr 'æ' 'Æ'
+ULTIMUM·​RECOGNITUM·​EST·​DIE·​PASCHÆ·​ANTE·​DIEM·​Ⅴ·​KALENDAS·​APRILIS·​ANNO·​DOMINI·​ⅯⅯⅩⅩⅩⅡ
 ```
 
 For an example of this program in action, check out the timestamps on the
