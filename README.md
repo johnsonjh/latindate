@@ -11,6 +11,8 @@ from the
 [Number Forms](https://en.wikipedia.org/wiki/Number_Forms)
 [Unicode block](https://en.wikipedia.org/wiki/Unicode_block).
 
+It is regularly tested on IBM AIX and Linux (using both glibc and musl).
+
 ```
 $ date
 Thu Jun 26 10:53:02 PM EDT 2025
