@@ -98,19 +98,15 @@ toRoman (int num, wchar_t * buf, size_t size)
         static const wchar_t * onesMap [4] = { L"", L"Ⅰ", L"Ⅱ", L"Ⅲ" };
         (void)wcscat (buf, onesMap [num]);
         num = 0;
-      } else {
-        while (1 <= num && wcslen (buf) + 1 < size) {
+      } else while (1 <= num && wcslen (buf) + 1 < size) {
           (void)wcscat (buf, L"Ⅰ");
           num -= 1;
         }
-      }
-    } else {
-      while (num >= romanMap [i].val &&
-             wcslen (buf) + wcslen (romanMap [i].sym) < size - 1) {
+    } else while (num >= romanMap [i].val &&
+                  wcslen (buf) + wcslen (romanMap [i].sym) < size - 1) {
         (void)wcscat (buf, romanMap [i].sym);
         num -= romanMap [i].val;
       }
-    }
 }
 
 /******************************************************************************/
