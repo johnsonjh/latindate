@@ -54,27 +54,21 @@ match_utf8 (const char * s)
 
   size_t len = strlen (s);
 
-  if (4 <= len) {
-    for (size_t i = 0; i <= len - 4; ++i) {
+  if (4 <= len)
+    for (size_t i = 0; i <= len - 4; ++i)
       if ('u' == tolower (s [i])     &&
           't' == tolower (s [i + 1]) &&
           'f' == tolower (s [i + 2]) &&
-          '8' == s [i + 3]) {
+          '8' == s [i + 3])
         return true;
-      }
-    }
-  }
 
-  if (5 <= len) {
-    for (size_t i = 0; i <= len - 5; ++i) {
+  if (5 <= len)
+    for (size_t i = 0; i <= len - 5; ++i)
       if ('u' == tolower (s [i])     &&
           't' == tolower (s [i + 1]) &&
           'f' == tolower (s [i + 2]) &&
-          '8' == s [i + 4]) {
+          '8' == s [i + 4])
         return true;
-      }
-    }
-  }
 
   return false;
 }
