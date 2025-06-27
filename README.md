@@ -27,7 +27,7 @@ The text translated to English reads…
 
 > Last revised on the sixth day before the
 > [kalends](https://en.wikipedia.org/wiki/Calends)
-> of July, in the year of our Lord 2025
+> of July in the year of our Lord 2025
 
 …or, more succinctly:
 
@@ -50,7 +50,7 @@ The output itself is intended to be rendered using small capital glyphs, but
 if you prefer regular capitals, you can leverage `tr` for the conversion:
 
 ```
-faketime -m 2032-03-28 ./latindate | tr '[:lower:]' '[:upper:]' | tr 'æ' 'Æ'
+faketime -m 2032-03-28 latindate | tr '[:lower:]' '[:upper:]' | tr 'æ' 'Æ'
 ULTIMUM·​RECOGNITUM·​EST·​DIE·​PASCHÆ·​ANTE·​DIEM·​Ⅴ·​KALENDAS·​APRILIS·​ANNO·​DOMINI·​ⅯⅯⅩⅩⅩⅡ
 ```
 
