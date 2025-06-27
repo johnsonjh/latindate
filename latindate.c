@@ -47,7 +47,7 @@ static const struct RomanMap romanMap [] =
 /******************************************************************************/
 
 static bool
-match_utf8 (const char *s)
+match_utf8 (const char * s)
 {
   if (!s)
     return false;
