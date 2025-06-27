@@ -1,13 +1,13 @@
-                  /*****************************************
-                   * latindate.c                           *
-                   * Copyright (c) 2025 Jeffrey H. Johnson *
-                   * SPDX-License-Identifier: MIT-0        *
-                   * vim: set expandtab cc=80 :            *
-                   *****************************************/
+/*****************************************
+ * latindate.c                           *
+ * Copyright (c) 2025 Jeffrey H. Johnson *
+ * SPDX-License-Identifier: MIT-0        *
+ * vim: set expandtab cc=80 :            *
+ *****************************************/
 
-   /***********************************************************************
-    * NOTE: This source contains UTF-8 interpuncts and zero-width spaces! *
-    ***********************************************************************/
+/***************************************************************************
+ * This file contains UTF-8 ligatures, interpuncts, and zero-width spaces! *
+ ***************************************************************************/
 
 #include <ctype.h>
 #include <langinfo.h>
