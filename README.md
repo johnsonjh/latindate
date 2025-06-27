@@ -5,11 +5,11 @@
 # latindate
 
 This is a utility, written in C99, that displays a timestamp in Latin using
-the Roman calendar, with Roman numerals displayed properly using the
+the Roman calendar (with Roman numerals displayed properly using the
 [Roman numeral glyphs](https://en.wikipedia.org/wiki/Numerals_in_Unicode#Roman_numerals)
 from the
 [Number Forms](https://en.wikipedia.org/wiki/Number_Forms)
-[Unicode block](https://en.wikipedia.org/wiki/Unicode_block).
+[Unicode block](https://en.wikipedia.org/wiki/Unicode_block)).
 
 It is regularly tested on IBM AIX and Linux (using both glibc and musl).
 
