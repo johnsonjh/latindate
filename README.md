@@ -46,9 +46,8 @@ $ faketime -m 2032-03-28 latindate
 ultimum·​recognitum·​est·​die·​paschæ·​ante·​diem·​Ⅴ·​kalendas·​aprilis·​anno·​domini·​ⅯⅯⅩⅩⅩⅡ
 ```
 
-The output itself is intended to be rendered using small capital glyphs.
-
-If you want regular capitals, you can leverage `tr` for the conversion:
+The output itself is intended to be rendered using small capital glyphs, but
+if you prefer regular capitals, you can leverage `tr` for the conversion:
 
 ```
 faketime -m 2032-03-28 ./latindate | tr '[:lower:]' '[:upper:]' | tr 'æ' 'Æ'
