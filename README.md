@@ -4,11 +4,14 @@
 <!-- vim: set expandtab cc=80 ft=markdown : -->
 # latindate
 
-This is a utility written in C99 that displays a timestamp in Latin using the Roman
-calendar.  The output uses the
+* This is a utility, written in C99, that displays a timestamp in Latin using
+the Roman calendar and Roman numerals.
+
+* The output uses
 [Roman numeral glyphs](https://en.wikipedia.org/wiki/Numerals_in_Unicode#Roman_numerals)
 (from the
-[Number Forms](https://en.wikipedia.org/wiki/Number_Forms) Unicode block) to
+[Number Forms](https://en.wikipedia.org/wiki/Number_Forms)
+[Unicode block](https://en.wikipedia.org/wiki/Unicode_block)) to
 represent dates.
 
 ```
@@ -22,16 +25,20 @@ $ latindate
 ultimum·​recognitum·​est·​ante·​diem·​Ⅵ·​kalendas·​iulias·​anno·​domini·​ⅯⅯⅩⅩⅤ
 ```
 
-This translates as "Last revised on the sixth day before the
-[kalends](https://en.wikipedia.org/wiki/Calends) of July, in the year of our Lord 2025",
-or simply "Last revised June 26 2025".
+* This translates as "*Last revised on the sixth day before the
+[kalends](https://en.wikipedia.org/wiki/Calends)
+of July, in the year of our Lord 2025*", or simply
+"*Last revised June 26 2025*".
 
-The Latin text is in lower case with spaces indicated by interpunct (`·`) characters
-followed by Unicode zero-width spaces, for easier post-processing.  The output itself is
-intended to be rendered using small capitals.  For an example of this utility in action,
-see the timestamps on the [Illuminationes](https://johnsonjh.github.io/) web page.
+* The Latin text output in lower case, with words delimited by interpunct (`·`)
+characters, followed by Unicode zero-width space characters, for easier
+post-processing.  (The output itself is intended to be rendered using small
+capitals.)
 
-Note that if you want to see generate Latin text for *arbitrary* dates,
+* For an example of this utility in action, see the timestamps on the
+[**Illuminationes**](https://johnsonjh.github.io/) web page.
+
+* Note that if you want to see generate Latin text for *arbitrary* dates,
 [`libfaketime`](https://github.com/wolfcw/libfaketime) comes in handy:
 
 ```
