@@ -21,13 +21,13 @@ $ latindate
 ultimum·​recognitum·​est·​ante·​diem·​Ⅵ·​kalendas·​iulias·​anno·​domini·​ⅯⅯⅩⅩⅤ
 ```
 
-The text translated to English reads:
+The text translated to English reads…
 
 > Last revised on the sixth day before the
 > [kalends](https://en.wikipedia.org/wiki/Calends)
 > of July, in the year of our Lord 2025
 
-or, more succinctly:
+…or, more succinctly:
 
 > Last revised June 26 2025
 
@@ -36,7 +36,7 @@ The Latin text is output in lower case, with words delimited by interpunct
 post-processing.  Ligatures are used where appropriate.  Easter and Christmas
 have specific handling.
 
-If you want to see generate Latin text for *arbitrary* dates,
+If you want to see generate the Latin text for *arbitrary* dates,
 [`libfaketime`](https://github.com/wolfcw/libfaketime) comes in handy:
 
 ```
@@ -44,14 +44,14 @@ $ faketime -m 2032-03-28 latindate
 ultimum·​recognitum·​est·​die·​paschæ·​ante·​diem·​Ⅴ·​kalendas·​aprilis·​anno·​domini·​ⅯⅯⅩⅩⅩⅡ
 ```
 
+The output itself is intended to be rendered using small capital glyphs.
 
-The output itself is intended to be rendered using small capital glyphs.  If
-you want regular capitals, you can leverage `tr` for the conversion:
+If you want regular capitals, you can leverage `tr` for the conversion:
 
 ```
 $ faketime -m 1909-01-06 ./latindate | tr '[:lower:]' '[:upper:]'
 ULTIMUM·​RECOGNITUM·​EST·​ANTE·​DIEM·​Ⅷ·​IDUS·​IANUARIAS·​ANNO·​DOMINI·​ⅯⅭⅯⅨ
 ```
 
-For an example of this utility in action, check out the timestamps on the
+* For an example of this utility in action, check out the timestamps on the
 [**Illuminationes**](https://johnsonjh.github.io/) web page.
