@@ -53,5 +53,5 @@ $ faketime -m 1909-01-06 ./latindate | tr '[:lower:]' '[:upper:]'
 ULTIMUM·​RECOGNITUM·​EST·​ANTE·​DIEM·​Ⅷ·​IDUS·​IANUARIAS·​ANNO·​DOMINI·​ⅯⅭⅯⅨ
 ```
 
-* For an example of this utility in action, check out the timestamps on the
+For an example of this program in action, check out the timestamps on the
 [**Illuminationes**](https://johnsonjh.github.io/) web page.
