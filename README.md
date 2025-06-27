@@ -5,11 +5,11 @@
 # latindate
 
 This is a utility, written in C99, that displays a timestamp in Latin using
-the Roman calendar and Roman numerals (displayed as proper
+the Roman calendar, with Roman numerals displayed properly using the
 [Roman numeral glyphs](https://en.wikipedia.org/wiki/Numerals_in_Unicode#Roman_numerals)
 from the
 [Number Forms](https://en.wikipedia.org/wiki/Number_Forms)
-[Unicode block](https://en.wikipedia.org/wiki/Unicode_block)).
+[Unicode block](https://en.wikipedia.org/wiki/Unicode_block).
 
 ```
 $ date
@@ -44,11 +44,11 @@ ultimum·​recognitum·​est·​die·​paschæ·​ante·​diem·​Ⅴ·�
 
 
 The output itself is intended to be rendered using small capital glyphs.  If
-you want capitals directly, you can leverage `tr`:
+you want capitals directly, you can leverage `tr` for conversion:
 
 ```
-faketime -m 1900-01-01 ./latindate | tr '[:lower:]' '[:upper:]' 
-ULTIMUM·​RECOGNITUM·​EST·​KALENDAE·​IANUARIAS·​ANNO·​DOMINI·​ⅯⅭⅯ
+$ faketime -m 1909-01-06 ./latindate | tr '[:lower:]' '[:upper:]'
+ULTIMUM·​RECOGNITUM·​EST·​ANTE·​DIEM·​Ⅷ·​IDUS·​IANUARIAS·​ANNO·​DOMINI·​ⅯⅭⅯⅨ
 ```
 
 For an example of this utility in action, check out the timestamps on the
