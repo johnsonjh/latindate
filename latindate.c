@@ -21,10 +21,10 @@
 
 /******************************************************************************/
 
-#define MaxLatinLength    128
-#define MaxDayPartLength   18
-#define MaxRomanYearLength 16
-#define MaxRomanCountLength 6
+#define MaxLatinLength    121
+#define MaxDayPartLength   17
+#define MaxRomanYearLength 14
+#define MaxRomanCountLength 5
 
 /******************************************************************************/
 
@@ -164,7 +164,7 @@ buildLatinDate (wchar_t * output, size_t size)
 
   int daysInMonth;
 
-  if (1581 < year && isEaster (d, month, year))
+  if (1582 < year && isEaster (d, month, year))
     holiday = L"die·​paschæ·​";
   else if (25 == d && 11 == month)
     holiday = L"die·​nativitatis·​domini·​";
