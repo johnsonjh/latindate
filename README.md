@@ -46,7 +46,7 @@ ultimum·​recognitum·​est·​die·​paschæ·​ante·​diem·​Ⅴ·�
 
 
 The output itself is intended to be rendered using small capital glyphs.  If
-you want capitals directly, you can leverage `tr` for conversion:
+you want regular capitals, you can leverage `tr` for the conversion:
 
 ```
 $ faketime -m 1909-01-06 ./latindate | tr '[:lower:]' '[:upper:]'
@@ -54,4 +54,4 @@ ULTIMUM·​RECOGNITUM·​EST·​ANTE·​DIEM·​Ⅷ·​IDUS·​IANUARIAS�
 ```
 
 For an example of this utility in action, check out the timestamps on the
-[***Illuminationes***](https://johnsonjh.github.io/) web page.
+[**Illuminationes**](https://johnsonjh.github.io/) web page.
