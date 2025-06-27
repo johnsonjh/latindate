@@ -5,7 +5,7 @@
 # latindate
 
 This is a utility, written in C99, that displays a timestamp in Latin using
-inclusive counting style of the
+the inclusive counting style of the
 [Roman calendar](https://en.m.wikipedia.org/wiki/Roman_calendar)
 (and with Roman numerals displayed properly using the
 [Roman numeral glyphs](https://en.wikipedia.org/wiki/Numerals_in_Unicode#Roman_numerals)
