@@ -1,9 +1,9 @@
-/*****************************************
- * latindate.c                           *
- * Copyright (c) 2025 Jeffrey H. Johnson *
- * SPDX-License-Identifier: MIT-0        *
- * vim: set expandtab cc=80 :            *
- *****************************************/
+/**********************************************
+ * latindate.c                                *
+ * Copyright (c) 2025-2026 Jeffrey H. Johnson *
+ * SPDX-License-Identifier: MIT-0             *
+ * vim: set expandtab cc=80 :                 *
+ **********************************************/
 
 /***************************************************************************
  * This file contains UTF-8 ligatures, interpuncts, and zero-width spaces! *
@@ -84,6 +84,7 @@ toRoman (int num, wchar_t * buf, size_t size)
       L"Ⅰ", L"Ⅱ", L"Ⅲ", L"Ⅳ", L"Ⅴ", L"Ⅵ",
       L"Ⅶ", L"Ⅷ", L"Ⅸ", L"Ⅹ", L"Ⅺ", L"Ⅻ"
     };
+
     (void)wcsncpy (buf, directMap [num], size - 1);
     buf [size - 1] = L'\0';
 
@@ -96,6 +97,7 @@ toRoman (int num, wchar_t * buf, size_t size)
     if (1 == romanMap [i].val) {
       if (num < 4) {
         static const wchar_t * onesMap [4] = { L"", L"Ⅰ", L"Ⅱ", L"Ⅲ" };
+
         (void)wcscat (buf, onesMap [num]);
         num = 0;
       } else while (1 <= num && wcslen (buf) + 1 < size) {
@@ -163,17 +165,19 @@ buildLatinDate (wchar_t * output, size_t size)
     case 1:
       daysInMonth =
           (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0)) ? 29 : 28;
+
       break;
 
     case 0: case 2: case 4: case 6: case 7: case 9: case 11:
       daysInMonth = 31;
+
       break;
 
     default:
       daysInMonth = 30;
   }
 
-  int nones = (2 == month || 4 == month || 6 == month || 9 == month) ? 7 : 5;
+  int nones = (2 == month || 4 == month || 6 == month || 9 == month) ?  7 :  5;
   int ides  = (2 == month || 4 == month || 6 == month || 9 == month) ? 15 : 13;
 
   wchar_t dayPart    [MaxDayPartLength]    = L"";
@@ -182,15 +186,18 @@ buildLatinDate (wchar_t * output, size_t size)
 
   const wchar_t * marker      = NULL;
   const wchar_t * markerMonth = NULL;
+  int displayYear             = year;
 
   if (1 == d) {
     (void)wcscpy (dayPart, L"kalendae");
     markerMonth = months [month];
   } else if (d < nones) {
     int count = nones - d + 1;
+
     toRoman (count, romanCount, MaxRomanCountLength);
     marker      = L"nonas";
     markerMonth = months [month];
+
     if (2 == count)
       (void)wcscpy (dayPart, L"pridie");
     else
@@ -202,9 +209,11 @@ buildLatinDate (wchar_t * output, size_t size)
     markerMonth = months [month];
   } else if (d < ides) {
     int count = ides - d + 1;
+
     toRoman (count, romanCount, MaxRomanCountLength);
     marker      = L"idus";
     markerMonth = months [month];
+
     if (2 == count)
       (void)wcscpy (dayPart, L"pridie");
     else
@@ -216,9 +225,14 @@ buildLatinDate (wchar_t * output, size_t size)
     markerMonth = months [month];
   } else {
     int count = daysInMonth - d + 2;
+
     toRoman (count, romanCount, MaxRomanCountLength);
     marker      = L"kalendas";
     markerMonth = months [ (month + 1) % 12];
+
+    if (11 == month)
+      displayYear++;
+
     if (2 == count)
       (void)wcscpy (dayPart, L"pridie");
     else
@@ -229,10 +243,11 @@ buildLatinDate (wchar_t * output, size_t size)
 
   if (1 > year || 3999 < year) {
     (void)fprintf (stderr, "ERROR: Invalid year: must be >0 and <4000\n");
+
     exit (1);
   }
 
-  toRoman (year, romanYear, MaxRomanYearLength);
+  toRoman (displayYear, romanYear, MaxRomanYearLength);
 
   if (NULL == marker)
     (void)swprintf (output, size,
@@ -253,6 +268,7 @@ main (void)
 {
   if (0 != setlocale (LC_ALL, "")) {
     char * codeset = nl_langinfo (CODESET);
+
     if (codeset)
       if (!match_utf8 (codeset)) {
         (void)fprintf (stderr, "WARNING: Likely non-UTF-8 encoding: '%s'\n",
@@ -261,13 +277,17 @@ main (void)
       }
   } else {
     (void)fprintf (stderr, "ERROR: Failed to setup locale!\n");
+
     exit (1);
   }
 
   wchar_t inscription [MaxLatinLength] = { 0 };
+
   buildLatinDate (inscription, MaxLatinLength);
 
-  return !wprintf (L"%ls", inscription);
+  int rc = wprintf (L"%ls", inscription);
+
+  return (rc < 0) ? EXIT_FAILURE : EXIT_SUCCESS;
 }
 
 /******************************************************************************/

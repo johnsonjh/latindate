@@ -1,5 +1,5 @@
 <!-- README.md -->
-<!-- Copyright (c) 2025 Jeffrey H. Johnson -->
+<!-- Copyright (c) 2025-2026 Jeffrey H. Johnson -->
 <!-- SPDX-License-Identifier: MIT-0 -->
 <!-- vim: set expandtab cc=80 ft=markdown : -->
 # latindate
